@@ -13,8 +13,8 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
-int out_pin = 15;
-int in_pin = 4;
+int out_pin = 2;
+int in_pin = 0;
 int BUTTONstate = 0;
 int number = 0;
 
@@ -56,11 +56,11 @@ void loop() {
   BUTTONstate = digitalRead(in_pin);
   
   if (BUTTONstate == HIGH){
-    digitalWrite(out_pin, LOW);
+    digitalWrite(out_pin, HIGH);
   } 
   else{
-    digitalWrite(out_pin, HIGH);
-    
+    digitalWrite(out_pin, LOW);
+    Serial.print("send");
     //Send an HTTP POST request every 10 minutes
     if ((millis() - lastTime) > timerDelay) {
       

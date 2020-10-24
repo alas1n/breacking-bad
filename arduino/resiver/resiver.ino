@@ -13,6 +13,7 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
+int ledPin = 12;
 int out_pin = 15;
 int in_pin = 4;
 int BUTTONstate = 0;
@@ -23,7 +24,7 @@ const char* password = "coline9713";
 
 //Your Domain name with URL path or IP address with path
 //String serverName = "http://httpbin.org/ip";
-String serverName = "http://e5b222ab1d48.ngrok.io/send";
+String serverName = "http://e5b222ab1d48.ngrok.io/get";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.
@@ -31,10 +32,10 @@ unsigned long lastTime = 0;
 // Timer set to 10 minutes (600000)
 //unsigned long timerDelay = 600000;
 // Set timer to 5 seconds (5000)
-unsigned long timerDelay = 5000;
+unsigned long timerDelay = 500;
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(ledPin, OUTPUT);
   pinMode(out_pin, OUTPUT);
   pinMode(in_pin, INPUT);
   Serial.begin(115200); 
@@ -54,14 +55,7 @@ void setup() {
 
 void loop() {
   BUTTONstate = digitalRead(in_pin);
-  
-  if (BUTTONstate == HIGH){
-    digitalWrite(out_pin, LOW);
-  } 
-  else{
-    digitalWrite(out_pin, HIGH);
-    
-    //Send an HTTP POST request every 10 minutes
+  //Send an HTTP POST request every 10 minutes
     if ((millis() - lastTime) > timerDelay) {
       
       //Check WiFi connection status
@@ -82,7 +76,13 @@ void loop() {
         Serial.println(payload);
         Serial.println(number);
         if (payload == "1") {
+          Serial.println("payload");
+          Serial.println(payload);
           Serial.println("Light is ON");
+          digitalWrite(ledPin, HIGH);
+          delay(2000);
+          Serial.println("Light is OFF");
+          digitalWrite(ledPin, LOW);
         }
         else {
           Serial.println("Light is OFF");
@@ -101,6 +101,4 @@ void loop() {
     }
     lastTime = millis();
   }
-  }
-
 }

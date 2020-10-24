@@ -6,6 +6,9 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
+from flask import Flask, jsonify
+
+
 bp = Blueprint('blog', __name__)
 
 # Index
@@ -42,7 +45,7 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            # return redirect(url_for('blog.index'))
 
     return render_template('blog/create.html')
 
@@ -101,3 +104,57 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+
+
+
+
+# getpost1
+def get_post1(id):
+    post = get_db().execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
+
+    return post
+
+def body_to_1(id):
+  post = get_post1(id)
+  db = get_db()
+  db.execute(
+    'UPDATE post SET title = ?, body = ?'
+    ' WHERE id = ?',
+    ('1', '1', id)
+    )
+  db.commit()
+  return 'done'
+
+def body_to_0(id):
+  post = get_post1(id)
+  db = get_db()
+  db.execute(
+    'UPDATE post SET title = ?, body = ?'
+    ' WHERE id = ?',
+    ('1', '0', id)
+    )
+  db.commit()
+  return 'done'
+
+
+# MINE GET
+@bp.route('/get', methods=('GET',))
+def mine():
+  post = get_post1(1)
+  body_to_0(1)
+  # return jsonify({"hello":'done'})
+  return post[2]
+
+
+# MINE POST  
+@bp.route('/send', methods=('GET',))
+def mine1():
+  post = get_post1(1)
+  body_to_1(1)
+  return post[2]
