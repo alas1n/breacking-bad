@@ -24,7 +24,7 @@ const char* password = "coline9713";
 
 //Your Domain name with URL path or IP address with path
 //String serverName = "http://httpbin.org/ip";
-String serverName = "http://e5b222ab1d48.ngrok.io/get";
+String serverName = "https://70806da3ab95.ngrok.io/resive";
 
 // the following variables are unsigned longs because the time, measured in
 // milliseconds, will quickly become a bigger number than can be stored in an int.

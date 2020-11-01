@@ -2,11 +2,17 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
-int ledPin = 12;
-int out_pin = 15;
-int in_pin = 4;
-int BUTTONstate = 0;
-int number = 0;
+int timeSeconds = 1;
+
+int interruptPin = 0;
+int ledPin = 2;
+int value = 0;
+
+// Timer: Auxiliary variables
+unsigned long now = millis();
+unsigned long lastTrigger = 0;
+boolean startTimer = false;
+
 
 const char* ssid = "co-line";
 const char* password = "coline9713";
@@ -15,21 +21,41 @@ const char * headerKeys[] = {"Value"} ;
 const size_t numberOfHeaders = 1;
 
 //Your Domain name with URL path or IP address with path
-String serverName = "http://51e24adebbe6.ngrok.io/head";
+String Resiver = "http://70806da3ab95.ngrok.io/resive";
+String Sender = "http://70806da3ab95.ngrok.io/send";
 
-// the following variables are unsigned longs because the time, measured in
-// milliseconds, will quickly become a bigger number than can be stored in an int.
 unsigned long lastTime = 0;
 // Timer set to 10 minutes (600000)
 //unsigned long timerDelay = 600000;
 // Set timer to 5 seconds (5000)
 unsigned long timerDelay = 500;
 
+
+ICACHE_RAM_ATTR void detectsMovement() {
+  if ((millis() - lastTime) > timerDelay) {
+    if(WiFi.status()== WL_CONNECTED){
+        HTTPClient http;
+  Serial.println("Sending");
+////////////////////////////////SENDER////////////////////////////////
+  String serverPath = Sender;
+  http.begin(serverPath.c_str());
+  http.GET();
+  http.end();
+  startTimer = true;
+  lastTrigger = millis();
+    }
+  }else {
+    Serial.println("WiFi Disconnected");
+    }
+
+}
+
 void setup() {
+  Serial.begin(115200);
+
+  attachInterrupt(digitalPinToInterrupt(interruptPin), detectsMovement, FALLING);
+  pinMode(interruptPin, INPUT);
   pinMode(ledPin, OUTPUT);
-  pinMode(out_pin, OUTPUT);
-  pinMode(in_pin, INPUT);
-  Serial.begin(115200); 
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
@@ -45,59 +71,55 @@ void setup() {
 }
 
 void loop() {
-  BUTTONstate = digitalRead(in_pin);
-  //Send an HTTP POST request every 10 minutes
-    if ((millis() - lastTime) > timerDelay) {
-      
-      //Check WiFi connection status
-      if(WiFi.status()== WL_CONNECTED){
-      HTTPClient http;
-      String serverPath = serverName;
+  // Current time
+  now = millis();
 
-      // Your Domain name with URL path or IP address with path
-      http.begin(serverPath.c_str());
-
-
-      // get all headers in respnse:
-      http.collectHeaders(headerKeys, numberOfHeaders);
-      
-      // Send HTTP GET request
-      int httpResponseCode = http.GET();
-      
-      if (httpResponseCode>0) {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
-        String payload = http.getString();
-        Serial.println(payload);
-        Serial.println(number);
-        Serial.print("value: ");
-        Serial.println(http.header("Value"));
-          
-        
-        if (http.header("Value") == "100") {
-          Serial.println("payload");
-          Serial.println(payload);
-          Serial.println("Light is ON");
-          digitalWrite(ledPin, HIGH);
-//          delay(2000);
-//          Serial.println("Light is OFF");
-//          digitalWrite(ledPin, LOW);
-        }
-        else {
-          Serial.println("Light is OFF");
-        }
-        number++;
-      }
-      else {
-        Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
-      }
-      // Free resources
-      http.end();
+  if(startTimer && (now - lastTrigger > (timeSeconds*500))) {
+    
+  
+  if ((millis() - lastTime) > timerDelay) {
+    if(WiFi.status()== WL_CONNECTED){
+//      if (digitalRead(interruptPin) == LOW) {
+//        HTTPClient http;
+//        Serial.println("Sending");
+//////////////////////////////////SENDER////////////////////////////////
+//        String serverPath = Sender;
+//        http.begin(serverPath.c_str());
+////        int httpResponseCode = http.GET();
+//        http.GET();
+//        http.end();
+//        } 
+//        else {
+////////////////////////////////Resiver////////////////////////////////
+          HTTPClient http;
+          Serial.println("Resiving");
+          String serverPath = Resiver;
+          http.begin(serverPath.c_str());
+          http.collectHeaders(headerKeys, numberOfHeaders);
+          int httpResponseCode = http.GET();
+          if (httpResponseCode>0) {
+//            Serial.print("HTTP Response code: ");
+//            Serial.println(httpResponseCode);
+//            String payload = http.getString();
+//            Serial.println(payload);
+            Serial.print("value: ");
+            Serial.println(http.header("Value"));
+            if (value < http.header("Value").toInt()) {
+              digitalWrite(ledPin, LOW);
+              Serial.println("LED ON");
+              delay(500);
+              digitalWrite(ledPin, HIGH);
+              Serial.println("LED OFF");
+              value = http.header("Value").toInt(); 
+              }
+            }
+            http.end();
+//            }
+       }
     }
-    else {
-      Serial.println("WiFi Disconnected");
+  else {
+    Serial.println("WiFi Disconnected");
     }
-    lastTime = millis();
+    startTimer = false;
   }
 }

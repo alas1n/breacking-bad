@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, Response
 )
 from werkzeug.exceptions import abort
 
@@ -7,6 +7,7 @@ from flaskr.auth import login_required
 from flaskr.db import get_db
 
 from flask import Flask, jsonify
+
 
 
 bp = Blueprint('blog', __name__)
@@ -122,39 +123,52 @@ def get_post1(id):
 
 def body_to_1(id):
   post = get_post1(id)
+  number = int(post[1])
+  number = number + 1
+  number = str(number)
   db = get_db()
   db.execute(
     'UPDATE post SET title = ?, body = ?'
     ' WHERE id = ?',
-    ('1', '1', id)
+    (number, "2", id)
     )
   db.commit()
   return 'done'
 
-def body_to_0(id):
-  post = get_post1(id)
-  db = get_db()
-  db.execute(
-    'UPDATE post SET title = ?, body = ?'
-    ' WHERE id = ?',
-    ('1', '0', id)
-    )
-  db.commit()
-  return 'done'
+# def body_to_0(id):
+#   post = get_post1(id)
+#   db = get_db()
+#   db.execute(
+#     'UPDATE post SET title = ?, body = ?'
+#     ' WHERE id = ?',
+#     ('10', '0', id)
+#     )
+#   db.commit()
+#   return 'done'
 
 
-# MINE GET
-@bp.route('/get', methods=('GET',))
-def mine():
-  post = get_post1(1)
-  body_to_0(1)
-  # return jsonify({"hello":'done'})
-  return post[2]
+# # MINE GET
+# @bp.route('/get', methods=('HEAD',))
+# def mine():
+#   post = get_post1(1)
+#   body_to_0(1)
+#   # return jsonify({"hello":'done'})
+#   return post[2]
 
 
 # MINE POST  
-@bp.route('/send', methods=('GET',))
+@bp.route('/send', methods=('GET','HEAD'))
 def mine1():
-  post = get_post1(1)
   body_to_1(1)
-  return post[2]
+  # post = get_post1(1)
+  # return "hellow"
+  return None
+
+
+  # MINE POST  
+@bp.route('/resive', methods=('GET','HEAD'))
+def mine2():
+  post = get_post1(1)
+  response = Response()
+  response.headers["value"] = post[1]
+  return response
