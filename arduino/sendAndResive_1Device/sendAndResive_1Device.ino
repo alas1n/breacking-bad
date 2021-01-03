@@ -9,12 +9,13 @@ int interruptPin = 5;
 // int ledPin = 2;
 int value = 0;
 
-int LED1 = 14;
-int LED2 = 12;
-int LED3 = 13;
-int LED4 = 15;
-int RGB1 = 1;
-int RGB2 = 3;
+int LED1 = 16;
+int LED2 = 4;
+int LED3 = 0;
+int LED4 = 2;
+int RGB1 = 12;
+int RGB2 = 13;
+int RGB3 = 14;
 
 // Timer: Auxiliary variables
 unsigned long now = millis();
@@ -74,7 +75,7 @@ void setup() {
   Serial.begin(115200);
   
   // Define interrupt Pin:
-  pinMode(interruptPin, INPUT_PULLUP);
+  pinMode(interruptPin, INPUT);
   attachInterrupt(digitalPinToInterrupt(interruptPin), SendRequest, RISING);
 
   // PinMode for Lamps:
@@ -84,6 +85,7 @@ void setup() {
   pinMode(LED4, OUTPUT);
   pinMode(RGB1, OUTPUT);
   pinMode(RGB2, OUTPUT);
+  pinMode(RGB3, OUTPUT);
 
   
   // connecting to wifi In any network with mobile : 192.168.4.1
@@ -142,60 +144,256 @@ void loop() {
 
 
 void valueChecker(int val) {
-  if(val == 0) {
+  if(val == 1) {
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 2) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 3) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 4) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 5) {
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 6) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+  else if (val == 7) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+    else if (val == 8) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+    else if (val == 9) {
     digitalWrite(LED1,HIGH);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
     digitalWrite(RGB1,LOW);
     digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
   } 
-  else if (val == 1) {
+    else if (val == 10) {
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,HIGH);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
     digitalWrite(RGB1,LOW);
     digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
   } 
-  else if (val == 2) {
+    else if (val == 11) {
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,HIGH);
     digitalWrite(LED4,LOW);
     digitalWrite(RGB1,LOW);
     digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
   } 
-  else if (val == 3) {
+    else if (val == 12) {
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,HIGH);
     digitalWrite(RGB1,LOW);
     digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
   } 
-  else if (val == 4) {
-    digitalWrite(LED1,LOW);
-    digitalWrite(LED2,LOW);
-    digitalWrite(LED3,LOW);
-    digitalWrite(LED4,LOW);
-    digitalWrite(RGB1,HIGH);
-    digitalWrite(RGB2,LOW);
-  } 
-  else if (val == 5) {
-    digitalWrite(LED1,LOW);
-    digitalWrite(LED2,LOW);
-    digitalWrite(LED3,LOW);
-    digitalWrite(LED4,LOW);
-    digitalWrite(RGB1,LOW);
-    digitalWrite(RGB2,HIGH);
-  } 
-  else if (val == 6) {
+    else if (val == 13) {
     digitalWrite(LED1,HIGH);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
     digitalWrite(RGB1,HIGH);
     digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
   } 
+    else if (val == 14) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+    else if (val == 15) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+    else if (val == 16) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,LOW);
+  } 
+    else if (val == 17) {
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 18) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 19) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 20) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,LOW);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 21) {
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 22) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 23) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 24) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  } 
+    else if (val == 25) {
+    digitalWrite(LED1,HIGH);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  } 
+   else if (val == 26) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,HIGH);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  }
+   else if (val == 27) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,HIGH);
+    digitalWrite(LED4,LOW);
+    digitalWrite(RGB1,HIGH);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);;
+  }
+   else if (val == 28) {
+    digitalWrite(LED1,LOW);
+    digitalWrite(LED2,LOW);
+    digitalWrite(LED3,LOW);
+    digitalWrite(LED4,HIGH);
+    digitalWrite(RGB1,LOW);
+    digitalWrite(RGB2,HIGH);
+    digitalWrite(RGB3,HIGH);
+  }
 }
