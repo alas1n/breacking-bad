@@ -47,3 +47,4 @@ flask/templates/hello_files/search.c43dbf30.svg
 flask/templates/hello_files/twitter.4714a669.svg
 flask/templates/hello_files/0.chunk.js
 flask/flaskr-tutorial/instance/flaskr.sqlite
+test/*
