@@ -6,7 +6,7 @@ const int LED=2; //On board blue LED
 void setup() { 
   Serial.begin(115200); 
   pinMode(LED,OUTPUT); 
-  pinMode(interruptPin, INPUT_PULLUP); 
+  pinMode(interruptPin, INPUT); 
   attachInterrupt(digitalPinToInterrupt(interruptPin), handleInterrupt, RISING); 
 } 
 

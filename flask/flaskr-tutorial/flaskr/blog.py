@@ -166,7 +166,7 @@ def mine1():
 
 
   # MINE POST  
-@bp.route('/resive', methods=('GET','HEAD'))
+@bp.route('/receive', methods=('GET','HEAD'))
 def mine2():
   post = get_post1(1)
   response = Response()

@@ -6,6 +6,7 @@
 /arduino/esp_01s_relay_v1
 /arduino/ESP8266
 /arduino/firstContact
+/arduino/testFolder
 /arduino/*.zip
 /arduino/*.ZIP
 
@@ -22,7 +23,9 @@ flask/venv/
 
 *.pdf
 *.png
-
+*.pyc
+**/*.pyc
+/flask/faskr-tutorial/instance
 
 
 arduino/.vscode/settings.json
@@ -47,3 +50,5 @@ flask/templates/hello_files/search.c43dbf30.svg
 flask/templates/hello_files/twitter.4714a669.svg
 flask/templates/hello_files/0.chunk.js
 flask/flaskr-tutorial/instance/flaskr.sqlite
+flask/flaskr-tutorial/flaskr/__pycache__/blog.cpython-36.pyc
+flask/flask-tutorial/**/*
