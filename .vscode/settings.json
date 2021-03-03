@@ -17,4 +17,7 @@
         "type_traits": "cpp",
         "utility": "cpp"
     }
+    "cSpell.words": [
+        "ssid"
+    ]
 }

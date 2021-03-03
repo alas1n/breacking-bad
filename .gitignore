@@ -52,3 +52,4 @@ flask/templates/hello_files/0.chunk.js
 flask/flaskr-tutorial/instance/flaskr.sqlite
 flask/flaskr-tutorial/flaskr/__pycache__/blog.cpython-36.pyc
 flask/flask-tutorial/**/*
+test/*
