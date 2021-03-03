@@ -8,8 +8,8 @@ const char *DEVICE_ID = "1";
 bool Receiving = true;
 
 int interruptPin = 5;
-int value = 0;
-int localValue = 0;
+int value = 1;
+int localValue = 2;
 
 int LED1 = 16;
 int LED2 = 4;
@@ -24,7 +24,7 @@ unsigned long now = millis();
 unsigned long lastTimeReq = 0;
 unsigned long lastTimeSleep = 0;
 unsigned long reqTimerDelay = 1000;    // time stamp between each request
-unsigned long sleepTimerDelay = 10000; // time stamp for sleep
+unsigned long sleepTimerDelay = 10000000; // time stamp for sleep
 
 const char *ssid = "Develoop";
 const char *password = "123Develoop456";
@@ -37,6 +37,7 @@ String BASEURL = "http://lamp.develoop.run/api/v1/";
 String Address = "";
 String Set = "set/";
 String Status = "status/";
+String ValueString = "";
 
 //---SENDER---//Using Interrupts:
 ICACHE_RAM_ATTR void SendRequest()
@@ -85,15 +86,18 @@ void loop()
             if ((now - lastTimeSleep) > sleepTimerDelay) 
             {
                  Serial.println("time to sleep");
-                //  valueChecker(value);
+                 valueChecker(-1);
             }
         }
         else 
         {
-            valueChecker(value);
-            Serial.println("Two devides are activate");
-            localValue = value;
-            lastTimeSleep = now;
+            // if (value != 0)
+            // {
+                valueChecker(localValue);
+                localValue = value;
+                Serial.println("Two devides are activate");
+                lastTimeSleep = now;
+            // }
         }
    
     }
@@ -107,8 +111,12 @@ void changeSendOrRecvie()
         Address = BASEURL + Status + DEVICE_ID;
     }
     else
-    {
-        Address = BASEURL + Set + DEVICE_ID;
+    {   
+        value = value + 1;
+        if (value == 29) {
+            value = 1;
+        }
+        Address = BASEURL + Set + DEVICE_ID + "?val=" + String(value);
         Receiving = true;
     }
 }
@@ -118,16 +126,21 @@ void sendRequest()
     if (WiFi.status() == WL_CONNECTED)
     {
         HTTPClient http;
-        http.begin("http://lamp.develoop.run/api/v1/status/1");
+        http.begin(Address);
+        Serial.println("Address");
+        Serial.println(Address);
         http.addHeader("Cache-Control", "max-age=0", false, false);
         int httpResponseCode = http.GET();
 
         if (httpResponseCode > 0)
         {
             String payload = http.getString();
-            value = payload.toInt();
-            // Serial.print("value ");
-            // Serial.println(value);
+            if(payload.toInt() != 0)
+            {
+                value = payload.toInt();
+            }
+            Serial.print("value ");
+            Serial.println(value);
         }
         http.end();
     }
@@ -139,7 +152,17 @@ void sendRequest()
 
 void valueChecker(int val)
 {
-    if (val == 1)
+    if (val == -1)
+    {
+        digitalWrite(LED1, LOW);
+        digitalWrite(LED2, LOW);
+        digitalWrite(LED3, LOW);
+        digitalWrite(LED4, LOW);
+        // digitalWrite(RGB1, LOW);
+        // digitalWrite(RGB2, LOW);
+        // digitalWrite(RGB3, LOW);
+    }
+    else if (val == 1)
     {
         digitalWrite(LED1, HIGH);
         digitalWrite(LED2, LOW);
@@ -416,7 +439,7 @@ void valueChecker(int val)
         digitalWrite(LED2, LOW);
         digitalWrite(LED3, LOW);
         digitalWrite(LED4, HIGH);
-        digitalWrite(RGB1, LOW);
+        digitalWrite(RGB1, HIGH);
         digitalWrite(RGB2, HIGH);
         digitalWrite(RGB3, HIGH);
     }
