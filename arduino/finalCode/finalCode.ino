@@ -6,6 +6,7 @@
 const char *DEVICE_ID = "1";
 
 bool Receiving = true;
+bool firstRun = true;
 
 int interruptPin = 5;
 int value = 1;
@@ -24,7 +25,7 @@ unsigned long now = millis();
 unsigned long lastTimeReq = 0;
 unsigned long lastTimeSleep = 0;
 unsigned long reqTimerDelay = 1000;    // time stamp between each request
-unsigned long sleepTimerDelay = 10000000; // time stamp for sleep
+unsigned long sleepTimerDelay = 10000; // time stamp for sleep
 
 const char *ssid = "Develoop";
 const char *password = "123Develoop456";
@@ -80,9 +81,11 @@ void loop()
         lastTimeReq = now;
         changeSendOrRecvie();
         sendRequest();
-
+       
+        
         // sleep delay loop //
         if (localValue == value){
+            firstRunChecker();
             if ((now - lastTimeSleep) > sleepTimerDelay) 
             {
                  Serial.println("time to sleep");
@@ -91,13 +94,11 @@ void loop()
         }
         else 
         {
-            // if (value != 0)
-            // {
-                valueChecker(localValue);
-                localValue = value;
-                Serial.println("Two devides are activate");
-                lastTimeSleep = now;
-            // }
+            valueChecker(localValue);
+            localValue = value;
+            Serial.println("Two devides are activate");
+            lastTimeSleep = now;
+
         }
    
     }
@@ -148,6 +149,15 @@ void sendRequest()
     {
         Serial.println("WiFi Disconnected");
     }
+}
+
+void firstRunChecker()
+{
+     if(firstRun) 
+        {
+            valueChecker(localValue);
+            firstRun = false;
+        }
 }
 
 void valueChecker(int val)
